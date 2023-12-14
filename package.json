@@ -1,14 +1,14 @@
 {
-    "name": "node-mongo-docker",
-    "version": "1.0.0",
-    "description": "Node.js server with MongoDB in Docker",
-    "main": "server.js",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "express": "^4.17.1",
-      "mongodb": "^4.0.0"
-    }
+  "name": "node-mongo-docker",
+  "version": "1.0.0",
+  "description": "Node.js server with MongoDB in Docker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^4.0.0"
   }
-  
+}
