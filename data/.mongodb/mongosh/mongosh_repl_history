@@ -1,0 +1,7 @@
+show collections
+use shazamVin
+show databases
+show collections
+db.createCollection("users")
+db.createCollection("vins")
+use shazamVin
