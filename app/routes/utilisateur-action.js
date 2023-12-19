@@ -91,8 +91,10 @@ shazamVin_usersRouter.post(UTILISATEUR + "/connexion", (req, res) => {
         collection.findOne({email: user.email, password: user.password}, (err, doc) => {
             if (err) {
                 console.error('Error getting documents from MongoDB:', err);
-                res.json(null);
                 return;
+            }
+            if(!doc){
+                res.json(null);
             }
             res.json(doc);
         });
