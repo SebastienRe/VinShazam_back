@@ -12,13 +12,15 @@ services:
       - mongo
     environment:
       NODE_ENV: development
-    volumes:
-      - ./app:/usr/src/app
 
   mongo:
-    image: mongo:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.mongo  # Utilisez le nouveau Dockerfile pour le service mongo
     container_name: mongo
     ports:
       - "27017:27017"
     volumes:
-      - ./data:/data/db
+      - "./data/sauvegarde:/data/sauvegarde"
+      - "./data/testUsers.json:/data/testUsers.json"
+      - "./data/testVin.json:/data/testVin.json"

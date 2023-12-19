@@ -1,0 +1,29 @@
+[
+    {
+      "id": "1",
+      "nom": "Château Example",
+      "domaine": "Domaine Example",
+      "millesime": 2015,
+      "region": "Bordeaux",
+      "pays": "France",
+      "description": "Un excellent vin rouge de la région de Bordeaux...",
+      "note": 4.5,
+      "imageURL": "https://exemple.com/image.jpg",
+      "creeLe": "2023-01-01",
+      "misAjourLe": "2023-12-19"
+    },
+    {
+      "id": "2",
+      "nom": "Domaine Sample",
+      "domaine": "Sample Winery",
+      "millesime": 2018,
+      "region": "California",
+      "pays": "USA",
+      "description": "A superb red wine from the sunny California vineyards...",
+      "note": 4.2,
+      "imageURL": "https://exemple.com/sample.jpg",
+      "creeLe": "2023-02-15",
+      "misAjourLe": "2023-12-19"
+    }
+  ]
+  

@@ -1,0 +1,19 @@
+[
+    {
+      "id": "1",
+      "nom": "Doe",
+      "prenom": "John",
+      "isAdmin": true,
+      "identifiant": "john.doe@example.com",
+      "motDePasse": "motdepasse123"
+    },
+    {
+      "id": "2",
+      "nom": "Smith",
+      "prenom": "Jane",
+      "isAdmin": false,
+      "identifiant": "jane.smith@example.com",
+      "motDePasse": "password456"
+    }
+  ]
+  
