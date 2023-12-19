@@ -3,6 +3,7 @@ FROM mongo:latest
 
 # Copiez le script d'initialisation dans le conteneur
 COPY ./scripts/init-script.sh /docker-entrypoint-initdb.d/
+COPY ./data/sauvegarde/ /data/sauvegarde
 RUN chmod +x /docker-entrypoint-initdb.d/init-script.sh
 
 # Créez le fichier data.bson

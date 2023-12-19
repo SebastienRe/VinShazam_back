@@ -21,6 +21,5 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - "./data/sauvegarde:/data/sauvegarde"
       - "./data/testUsers.json:/data/testUsers.json"
       - "./data/testVin.json:/data/testVin.json"
