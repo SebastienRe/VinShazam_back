@@ -124,5 +124,29 @@ shazamVin_vinsRouter.delete(VIN + '/deleteVin/:id', (req, res) => {
     });
 });
 
+shazamVin_vinsRouter.get(VIN + '/searchVin', (req, res) => {
+    //renvoi un vin au hazard
+    mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then((client) => {
+        if(!client) {
+            console.error('Error connecting to MongoDB:', err);
+            return;
+        }
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+        collection.find({}).toArray((err, docs) => {
+            if (err) {
+                console.error('Error getting documents from MongoDB:', err);
+                return;
+            }
+            console.log("nombre de vins : " + docs.length);
+            const index = Math.floor(Math.random() * docs.length);
+            console.log("index : " + index);
+            res.json(docs[index]);
+        });
+    }
+    );
+});
 //exporter les routes
 module.exports = {shazamVin_vinsRouter};

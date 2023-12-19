@@ -8,7 +8,7 @@ const modelVin = require('../models/utilisateur.js');
 const UTILISATEUR = "/users";
 
 shazamVin_usersRouter.get(UTILISATEUR, (req, res) => {
-        console.log("dans le get users");
+        
         mongodbPromise = mongodb.connect(urlMongodb);
     
         mongodbPromise.then((client) => {
@@ -18,7 +18,7 @@ shazamVin_usersRouter.get(UTILISATEUR, (req, res) => {
             }
             const db = client.db(dbName);
             const collection = db.collection(collectionName);
-            console.log("avant le find");
+            
             collection.find({}).toArray((err, docs) => {
                 if (err) {
                     console.error('Error getting documents from MongoDB:', err);
