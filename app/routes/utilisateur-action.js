@@ -76,5 +76,61 @@ shazamVin_usersRouter.post(UTILISATEUR + "/addUser", (req, res) => {
     });
 });
 
+shazamVin_usersRouter.post(UTILISATEUR + "/connexion", (req, res) => {
+    const user = req.body;
+    mongodbPromise = mongodb.connect(urlMongodb);
 
+    mongodbPromise.then((client) => {
+        if(!client) {
+            console.error('Error connecting to MongoDB:', err);
+            return;
+        }
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        collection.findOne({email: user.email, password: user.password}, (err, doc) => {
+            if (err) {
+                console.error('Error getting documents from MongoDB:', err);
+                res.json(null);
+                return;
+            }
+            res.json(doc);
+        });
+    });
+});
+
+//inscrire un utilisateur
+shazamVin_usersRouter.post(UTILISATEUR + "/inscription", (req, res) => {
+    const user = req.body;
+    mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise.then((client) => {
+        if(!client) {
+            console.error('Error connecting to MongoDB:', err);
+            return;
+        }
+        const db = client.db(dbName);
+        const collection = db.collection(collectionName);
+
+        collection.findOne({email: user.email}, (err, doc) => {
+            if (err) {
+                console.error('Error getting documents from MongoDB:', err);
+                res.json(null);
+                return;
+            }
+            if(doc){
+                res.json(null);
+            }else{
+                collection.insertOne(user, (err, result) => {
+                    if (err) {
+                        console.error('Error inserting document into MongoDB:', err);
+                        return;
+                    }
+                    console.log("le doc : " + JSON.stringify(result));
+                    res.json(result);
+                });
+            }
+        });
+    });
+});
 module.exports = {shazamVin_usersRouter};
