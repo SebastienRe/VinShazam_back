@@ -4,8 +4,7 @@
   "description": "Node.js server with MongoDB in Docker",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "start": "node /app/src/server.js"
   },
   "dependencies": {
     "express": "^4.17.1",

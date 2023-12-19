@@ -1,15 +1,11 @@
 # Dockerfile
 FROM node:14
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
 COPY package*.json ./
 
-#RUN npm install -g nodemon
 RUN npm install
-
-
-COPY ./app/ .
 
 # Install Python
 #RUN apt-get update && apt-get install -y python3 python3-pip
