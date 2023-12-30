@@ -86,7 +86,7 @@ shazamVin_usersRouter.post(UTILISATEUR + "/connexion", (req, res) => {
             }
 
             if (!doc) {
-                res.json(null);
+                res.status(204).send({ error: 'No content' });
                 return;
             }
 
@@ -111,7 +111,20 @@ shazamVin_usersRouter.post(UTILISATEUR + "/inscription", (req, res) => {
             }
             const db = client.db(dbName);
             const collection = db.collection(collectionName);
-
+            //chercher le dernier id et l incrémenter
+            collection.find({}).sort({ id: -1 }).limit(1).toArray((err, docs) => {
+                if (err) {
+                    console.error('Error getting documents from MongoDB:', err);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+                if (docs.length > 0) {
+                    user.id = docs[0].id + 1;
+                } else {
+                    user.id = 1;
+                }
+            }
+            );
             collection.findOne({ identifiant: user.identifiant }, (err, doc) => {
                 if (err) {
                     console.error('Error getting documents from MongoDB:', err);

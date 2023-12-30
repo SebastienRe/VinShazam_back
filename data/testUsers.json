@@ -1,6 +1,6 @@
 [
     {
-      "id": "1",
+      "id": 1,
       "nom": "Doe",
       "prenom": "John",
       "isAdmin": true,
@@ -8,7 +8,7 @@
       "motDePasse": "motdepasse123"
     },
     {
-      "id": "2",
+      "id": 2,
       "nom": "Smith",
       "prenom": "Jane",
       "isAdmin": false,
@@ -16,4 +16,5 @@
       "motDePasse": "password456"
     }
   ]
-  
+
+
