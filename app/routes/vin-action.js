@@ -1,5 +1,8 @@
 const express = require('express');
 const shazamVin_vinsRouter = express.Router();
+const fs = require('fs');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 const mongodb = require('mongodb').MongoClient;
 const urlMongodb = 'mongodb://mongo:27017';
 const dbName = 'shazamVin';
@@ -156,7 +159,23 @@ shazamVin_vinsRouter.delete(VIN + '/deleteVin/:id', (req, res) => {
 
 
 shazamVin_vinsRouter.post(VIN + '/searchVin', upload.single('image'), (req, res) => {
-     
+    console.log(req.file);
+    // Retrieve the file image
+    const image = req.file;
+    let base64Image = null;
+    // Read the file as base64
+    fs.readFile(image.path, { encoding: 'base64' }, (err, data) => {
+        if (err) {
+            console.error('Error reading file:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+            return;
+        }
+        base64Image = data;
+        //console.log('Base64 image:', base64Image);
+
+        // Continue with your logic here
+        // ...
+    });    
 
     mongodbPromise = mongodb.connect(urlMongodb);
 
