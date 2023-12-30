@@ -155,7 +155,7 @@ shazamVin_vinsRouter.delete(VIN + '/deleteVin/:id', (req, res) => {
 });
 
 
-shazamVin_vinsRouter.post(VIN + '/searchVin', upload.single('image'), (req, res) => {
+shazamVin_vinsRouter.post(VIN + '/searchVin', (req, res) => {
      
 
     mongodbPromise = mongodb.connect(urlMongodb);
