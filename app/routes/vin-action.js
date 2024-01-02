@@ -1,6 +1,7 @@
 const express = require('express');
 const shazamVin_vinsRouter = express.Router();
 const mongodb = require('mongodb').MongoClient;
+const { ObjectId } = require('mongodb');
 const urlMongodb = 'mongodb://mongo:27017';
 const dbName = 'shazamVin';
 const collectionName = 'vins';
@@ -96,6 +97,9 @@ shazamVin_vinsRouter.post(VIN + '/addVin', (req, res) => {
 
 shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
     const id = req.params.id;
+    console.log("id : " + id);
+    body = req.body;
+    console.log("body : " + JSON.stringify(body));
     mongodbPromise = mongodb.connect(urlMongodb);
 
     mongodbPromise
@@ -108,7 +112,15 @@ shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
             const collection = db.collection(collectionName);
 
             const vin = req.body;
-            collection.updateOne({ id: id }, { $set: vin }, (err, result) => {
+            delete vin._id;
+
+            // Calculate the average note of the comments
+            const comments = vin.comments;
+            const totalNotes = comments.reduce((sum, comment) => sum + comment.note, 0); 
+            const averageNote = totalNotes / comments.length;
+            vin.note = averageNote;
+
+            collection.updateOne({ _id: ObjectId(id) }, { $set: vin }, (err, result) => {
                 if (err) {
                     console.error('Error updating document into MongoDB:', err);
                     res.status(500).json({ error: 'Internal Server Error' });
