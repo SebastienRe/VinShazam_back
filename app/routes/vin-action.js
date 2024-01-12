@@ -181,7 +181,7 @@ shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
             const vin = req.body;
             delete vin._id;
             delete vin.comments;
-            vin.misAjourLe = new Date().toISOString().slice(0, 10);
+            vin.misAjourLe = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
             collection.updateOne({ _id: ObjectId(id) }, { $set: vin }, (err, result) => {
                 if (err) {
