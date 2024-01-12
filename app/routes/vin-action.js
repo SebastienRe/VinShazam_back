@@ -48,7 +48,7 @@ shazamVin_vinsRouter.get(VIN + "/vin/:id", (req, res) => {
             const db = client.db(dbName);
             const collection = db.collection(collectionName);
 
-            collection.findOne({ id: id }, (err, doc) => {
+            collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
                 if (err) {
                     console.error('Error getting documents from MongoDB:', err);
                     res.status(500).json({ error: 'Internal Server Error' });
@@ -63,7 +63,6 @@ shazamVin_vinsRouter.get(VIN + "/vin/:id", (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         });
 });
-
 
 shazamVin_vinsRouter.post(VIN + '/addVin', (req, res) => {
     mongodbPromise = mongodb.connect(urlMongodb);
@@ -94,12 +93,80 @@ shazamVin_vinsRouter.post(VIN + '/addVin', (req, res) => {
         });
 });
 
-
-shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
+shazamVin_vinsRouter.put(VIN + '/addComment/:id', (req, res) => {
+    console.log("addComment");
     const id = req.params.id;
     console.log("id : " + id);
+    mongodbPromise = mongodb.connect(urlMongodb);
+
+    mongodbPromise
+        .then(async (client) => {
+            if (!client) {
+                const err = new Error('Error connecting to MongoDB');
+                throw err;
+            }
+            const db = client.db(dbName);
+            const collection = db.collection(collectionName);
+            const comment = req.body;
+            console.log("comment : " + JSON.stringify(comment));
+
+            
+            await new Promise((resolve, reject) => {
+                collection.updateOne({ _id: ObjectId(id) }, { $push: { comments: comment } }, (err, result) => {
+                    if (err) {
+                        console.error('Error updating document into MongoDB:', err);
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        reject(err);
+                    }
+                    console.log("result : " + JSON.stringify(result));
+                    resolve();
+                });
+            });
+            
+            // on the collection comments = []
+            let comments;
+            await new Promise((resolve, reject) => {
+                collection.findOne({ _id: ObjectId(id) }, (err, doc) => {
+                    if (err) {
+                        console.error('Error getting documents from MongoDB:', err);
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        reject(err);
+                    }
+                    console.log("le doc : " + JSON.stringify(doc));
+                    comments = doc.comments;
+                    resolve();
+                });
+            });
+            console.log("comments : " + JSON.stringify(comments));
+
+            const totalNotes = comments.reduce((sum, comment) => sum + comment.note, 0); 
+            const averageNote = totalNotes / comments.length;
+
+            //update the average note
+            await new Promise((resolve, reject) => {
+                collection.updateOne({ _id: ObjectId(id) }, { $set: { note: averageNote } }, (err, result) => {
+                    if (err) {
+                        console.error('Error updating document into MongoDB:', err);
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        reject(err);
+                    }
+                    console.log("result : " + JSON.stringify(result));
+                    resolve();
+                });
+            });
+
+            res.json({success: true});
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
+});
+
+shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
+    console.log("updateVin");
+    const id = req.params.id;
     body = req.body;
-    console.log("body : " + JSON.stringify(body));
     mongodbPromise = mongodb.connect(urlMongodb);
 
     mongodbPromise
@@ -113,12 +180,8 @@ shazamVin_vinsRouter.put(VIN + '/updateVin/:id', (req, res) => {
 
             const vin = req.body;
             delete vin._id;
-
-            // Calculate the average note of the comments
-            const comments = vin.comments;
-            const totalNotes = comments.reduce((sum, comment) => sum + comment.note, 0); 
-            const averageNote = totalNotes / comments.length;
-            vin.note = averageNote;
+            delete vin.comments;
+            vin.misAjourLe = new Date().toISOString().slice(0, 10);
 
             collection.updateOne({ _id: ObjectId(id) }, { $set: vin }, (err, result) => {
                 if (err) {
